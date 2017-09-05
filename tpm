@@ -35,6 +35,20 @@ set_tpm_path() {
 	fi
 }
 
+tpm_clone_opt_set() {
+	tmux show-environment -g "$DEFAULT_TPM_CLONE_OPT_VAR_NAME" >/dev/null 2>&1
+}
+
+set_default_tpm_clone_opt() {
+	tmux set-environment -g "$DEFAULT_TPM_CLONE_OPT_VAR_NAME" "$DEFAULT_TPM_CLONE_OPT"
+}
+
+set_tpm_clone_opt() {
+	if ! tpm_clone_opt_set; then
+		set_default_tpm_clone_opt
+	fi
+}
+
 # 1. Fetches plugin names from `@plugin` variables
 # 2. Creates full plugin path
 # 3. Sources all *.tmux files from each of the plugin directories
@@ -65,6 +79,7 @@ supported_tmux_version_ok() {
 main() {
 	if supported_tmux_version_ok; then
 		set_tpm_path
+		set_tpm_clone_opt
 		set_tpm_key_bindings
 		source_plugins
 	fi

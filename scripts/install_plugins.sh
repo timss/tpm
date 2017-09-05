@@ -14,8 +14,12 @@ fi
 
 clone() {
 	local plugin="$1"
+	# https://github.com/tmux-plugins/tpm/issues/78
+	# `--recursive` might fail for simple http git mirrors/behind proxies
+	# TODO: has no effect/does not work at the moment, WIP
 	cd "$(tpm_path)" &&
-		GIT_TERMINAL_PROMPT=0 git clone --recursive "$plugin" >/dev/null 2>&1
+		GIT_TERMINAL_PROMPT=0 git clone ${!DEFAULT_TPM_CLONE_OPT_VAR_NAME} \
+		"$plugin" >/dev/null 2>&1
 }
 
 # tries cloning:
